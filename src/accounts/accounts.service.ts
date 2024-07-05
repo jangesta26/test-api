@@ -25,7 +25,7 @@ export class AccountsService {
         return await this.accountsRepository.save(newAccount);
     }
 
-    async findMany(): Promise<any[]> {
+    async all(): Promise<any[]> {
       
       const accounts = await this.accountsRepository.find();
     
@@ -43,6 +43,10 @@ export class AccountsService {
       }));
     
       return formattedAccounts;
+    }
+
+    async queryBuilder(alias: string) {
+        return this.accountsRepository.createQueryBuilder(alias);
     }
 
     async findOne(id: number): Promise<Accounts> {
