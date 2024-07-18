@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAccoountsDto } from './dto/create-accounts.dto';
 import { Accounts } from './entities/accounts.entity';
+import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
+import { filteringConfig } from './accounts.filter';
 
 @Injectable()
 export class AccountsService {
@@ -25,29 +27,22 @@ export class AccountsService {
         return await this.accountsRepository.save(newAccount);
     }
 
-    async all(): Promise<any[]> {
-      
-      const accounts = await this.accountsRepository.find();
     
-      const formattedAccounts = accounts.map(account => ({
-        id: account.id,
-        fname:account.fname,
-        lname:account.lname,
-        gender:account.gender,
-        dob:account.dob.toLocaleString(),
-        email:account.email,
-        username: account.username,
-        password: account.password,
-        status: account.status,
-        date: account.createdAt.toLocaleString(),
-      }));
-    
-      return formattedAccounts;
-    }
+    async findAll(query:PaginateQuery): Promise<Paginated<Accounts>> {
+        return paginate(query, this.accountsRepository,filteringConfig)
+          
+      }
 
+
+
+
+
+
+      
     async queryBuilder(alias: string) {
         return this.accountsRepository.createQueryBuilder(alias);
     }
+
 
     async findOne(id: number): Promise<Accounts> {
         const accounts = await this.accountsRepository.findOne({ where: { id } });
@@ -62,7 +57,7 @@ export class AccountsService {
         if (!account) {
             throw new NotFoundException(`Account with ID ${id} not found`);
         }
-        Object.assign(account, updateAccountsDto);
+        Object.assign(account, updateAccountsDto); 
         return await this.accountsRepository.save(account);
     }
 
