@@ -14,7 +14,6 @@ import {
  } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { CreateAccoountsDto } from './dto/create-accounts.dto';
-import { Request } from 'express';
 import { Paginate, PaginateQuery, Paginated, } from 'nestjs-paginate';
 import { Accounts } from './entities/accounts.entity';
 

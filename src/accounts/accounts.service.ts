@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateAccoountsDto } from './dto/create-accounts.dto';
 import { Accounts } from './entities/accounts.entity';
 import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
-import { filteringConfig } from './accounts.filter';
+import { paginateConfig } from './accounts.filter';
 
 @Injectable()
 export class AccountsService {
@@ -29,11 +29,11 @@ export class AccountsService {
 
     
     async findAll(query:PaginateQuery): Promise<Paginated<Accounts>> {
-        return paginate(query, this.accountsRepository,filteringConfig)
+        return paginate(query, this.accountsRepository,paginateConfig)
           
       }
 
-      
+
     async queryBuilder(alias: string) {
         return this.accountsRepository.createQueryBuilder(alias);
     }

@@ -1,7 +1,7 @@
 import { PaginateConfig  } from 'nestjs-paginate';
 import { Accounts } from './entities/accounts.entity';
 
-export const filteringConfig: PaginateConfig<Accounts> = {
+export const paginateConfig: PaginateConfig<Accounts> = {
   sortableColumns: ['id'],
   nullSort: 'last',
   defaultSortBy: [['id', 'ASC']],
@@ -25,7 +25,6 @@ export const filteringConfig: PaginateConfig<Accounts> = {
     'createdAt',
   ],
   
-  // maxLimit: 5,
   defaultLimit: 10,
 };
 
