@@ -4,7 +4,7 @@ import { Accounts } from './entities/accounts.entity';
 export const paginateConfig: PaginateConfig<Accounts> = {
   sortableColumns: ['id'],
   nullSort: 'last',
-  defaultSortBy: [['id', 'ASC']],
+  defaultSortBy: [['id', 'DESC']],
   searchableColumns: [
     'fname',
     'lname', 

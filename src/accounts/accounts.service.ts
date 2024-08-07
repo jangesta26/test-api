@@ -63,4 +63,9 @@ export class AccountsService {
         }
         await this.accountsRepository.remove(account);
     }
+
+    async findByUsername(username: string): Promise<Accounts | undefined> {
+        return this.accountsRepository.findOne({ where: { username } });
+    }
+
 }

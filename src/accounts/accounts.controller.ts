@@ -48,7 +48,6 @@ export class AccountsController {
      
     }
 
-  
     @Get(':id')
     findOne(@Param('id') id: string) {
       return this.accountsService.findOne(+id);
@@ -62,5 +61,7 @@ export class AccountsController {
     @Delete(':id')
     remove(@Param('id') id: number) {
       return this.accountsService.delete(id);
+
+    
     }
 }

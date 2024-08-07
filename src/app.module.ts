@@ -4,28 +4,23 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TodosModule } from './todos/todos.module';
-import { join } from 'path';
 import { AccountsModule } from './accounts/accounts.module';
+import { ImagesModule } from './image-profile/images.module';
+import { MysqlConfigService } from './config/mysql-config.services';
+import { UsersModule } from './user-logs/user-logs.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal:  true , envFilePath: ['.env']}),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get('DB_HOST'),
-        port: +configService.get('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        entities: [join(process.cwd(), 'dist/**/*.entity.js')],
-        synchronize: true,
-      }),
-      inject: [ConfigService],
+      useClass:MysqlConfigService,
+      inject:[MysqlConfigService]
     }),
-    ConfigModule.forRoot({envFilePath: ['.env']}),
-    TodosModule,
     AccountsModule,
+    ImagesModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
