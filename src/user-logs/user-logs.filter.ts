@@ -3,7 +3,6 @@ import { UserLog } from './entity/users.entity';
 
 export const paginateConfig: PaginateConfig<UserLog> = {
   sortableColumns: ['user_logs_id'],
-  nullSort: 'last',
   defaultSortBy: [['user_logs_id', 'DESC']],
   searchableColumns: [
     'username',
@@ -11,10 +10,7 @@ export const paginateConfig: PaginateConfig<UserLog> = {
   ],
 
   select: [
-    'id', 
-    'username',
-    'status', 
-    'createdAt',
+    'account_logs', 
   ],
   
   defaultLimit: 10,

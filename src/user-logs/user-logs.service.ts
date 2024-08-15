@@ -21,7 +21,7 @@ export class UsersService {
 
   async logAttempt(accountId: number, username: string): Promise<UserLog> {
     const log = this.userLogRepository.create({ 
-      userId: accountId,
+      accountId: accountId,
       username: username,
       status: 1,
     });

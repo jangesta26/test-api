@@ -1,10 +1,10 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateAccoountsDto } from './dto/create-accounts.dto';
 import { Accounts } from './entities/accounts.entity';
 import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
-import { paginateConfig } from './accounts.filter';
+import { accountsPaginateConfig } from './accounts.filter';
 
 @Injectable()
 export class AccountsService {
@@ -28,19 +28,34 @@ export class AccountsService {
     }
 
     
-    async findAll(query:PaginateQuery): Promise<Paginated<Accounts>> {
-        return paginate(query, this.accountsRepository,paginateConfig)
-          
-      }
+    findAll(query: PaginateQuery): Promise<Paginated<Accounts>> {
+        return paginate(query, this.accountsRepository, accountsPaginateConfig);
+    }
 
-
+    
     async queryBuilder(alias: string) {
         return this.accountsRepository.createQueryBuilder(alias);
     }
 
 
-    async findOne(id: number): Promise<Accounts> {
-        const accounts = await this.accountsRepository.findOne({ where: { id } });
+    findOne(id: number): Promise<Accounts> {
+        const accounts = this.accountsRepository
+        .createQueryBuilder('accounts')
+        .leftJoinAndSelect('accounts.images', 'images', 'images.status = :status', { status: 1 })
+        .select([
+            'accounts.id',
+            'accounts.fname',
+            'accounts.lname',
+            'accounts.gender',
+            'accounts.dob',
+            'accounts.email',
+            'accounts.username',
+            'accounts.status',
+            'accounts.createdAt',
+            'images.imageUrl'
+        ])
+        .where('accounts.id = :id', { id })
+        .getOne();
         if (!accounts) {
             throw new NotFoundException(`Account with ID ${id} not found`);
         }
@@ -65,7 +80,16 @@ export class AccountsService {
     }
 
     async findByUsername(username: string): Promise<Accounts | undefined> {
-        return this.accountsRepository.findOne({ where: { username } });
+        const accounts = await this.accountsRepository
+        .createQueryBuilder('accounts')
+        .leftJoinAndSelect('accounts.images', 'images', 'images.status = :status', { status: 1 })
+        .where('accounts.username = :username', { username })
+        .getOne();
+        if (!accounts) {
+            throw new NotFoundException(`Account with ID ${username} not found`);
+        }
+        console.log(accounts)
+        return accounts;
     }
 
 }

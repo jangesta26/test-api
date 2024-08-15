@@ -4,7 +4,7 @@ export class CreateUsersLogsDto {
 
     @IsNotEmpty()
     @IsNumber()
-    userId: number;
+    accountId: number;
 
     @IsNotEmpty()
     @IsString()

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Accounts } from 'src/accounts/entities/accounts.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
 
 @Entity({ name:'users_logs' })
 export class UserLog {
@@ -6,7 +7,7 @@ export class UserLog {
   user_logs_id: number;
 
   @Column()
-  userId: number;
+  accountId: number;
 
   @Column()
   username: string;
@@ -16,4 +17,10 @@ export class UserLog {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => Accounts, (account) => account.logs, {
+    nullable: false,
+    eager: true,
+  })
+  account: Accounts;
 }

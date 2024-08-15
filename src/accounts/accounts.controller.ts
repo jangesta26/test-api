@@ -37,7 +37,6 @@ export class AccountsController {
      
     }
   
-
     @Get('member')
     async findAll(@Paginate() query: PaginateQuery): Promise<Paginated<Accounts>> {
       try{
@@ -49,19 +48,37 @@ export class AccountsController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-      return this.accountsService.findOne(+id);
+    async findOne(@Param('id') id: string): Promise<Accounts> {
+      try {
+        const account = await this.accountsService.findOne(+id);
+        if (!account) {
+          throw new HttpException('Account not found', HttpStatus.NOT_FOUND);
+        }
+        return account;
+      } catch (error) {
+        throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
   
     @Put(':id')
-    update(@Param('id') id: number, @Body() updateAccountsDto: CreateAccoountsDto) {
-      return this.accountsService.update(id, updateAccountsDto);
+    async update(@Param('id') id: number, @Body() updateAccountsDto: CreateAccoountsDto) {
+      try {
+        const updatedAccount = await this.accountsService.update(id, updateAccountsDto);
+        if (!updatedAccount) {
+          throw new HttpException('Account not found', HttpStatus.NOT_FOUND);
+        }
+        return { statusCode: HttpStatus.OK, data: updatedAccount };
+      } catch (error) {
+        if (error instanceof ConflictException) {
+          throw new HttpException(error.message, HttpStatus.CONFLICT);
+        } else {
+          throw new HttpException('Internal Server Error', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+      }
     }
   
     @Delete(':id')
     remove(@Param('id') id: number) {
       return this.accountsService.delete(id);
-
-    
     }
 }

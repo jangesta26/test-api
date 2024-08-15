@@ -1,9 +1,8 @@
 import { PaginateConfig  } from 'nestjs-paginate';
 import { Accounts } from './entities/accounts.entity';
 
-export const paginateConfig: PaginateConfig<Accounts> = {
+export const accountsPaginateConfig: PaginateConfig<Accounts> = {
   sortableColumns: ['id'],
-  nullSort: 'last',
   defaultSortBy: [['id', 'DESC']],
   searchableColumns: [
     'fname',
@@ -13,19 +12,10 @@ export const paginateConfig: PaginateConfig<Accounts> = {
     'createdAt'
   ],
 
-  select: [
-    'id', 
-    'fname', 
-    'lname',
-    'gender',
-    'dob', 
-    'email', 
-    'username',
-    'status', 
-    'createdAt',
-  ],
+  relations: [
+    'images',
+    'logs',
+  ]
   
-  defaultLimit: 10,
 };
-
 

@@ -23,7 +23,13 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
      // Generate JWT token
-    const token = this.jwtService.sign({ username: account.username, userId: account.id });
+    const token = this.jwtService.sign({ 
+      userId: account.id,
+      username: account.username, 
+      fname: account.fname,
+      lname: account.lname,
+      imageUrl: account.images[0]?.imageUrl
+    });
 
     await this.userLogService.logAttempt(account.id, username);
 

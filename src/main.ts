@@ -8,14 +8,11 @@ async function bootstrap() {
 
   // dotenv.config();
 
-  // Initialize the NestJS application
   const app = await NestFactory.create(AppModule);
 
- // Fetch the ConfigService instance to get configuration values
   const cfgSvc = app.get(ConfigService)
   const port = cfgSvc.get('PORT_TEST_API') || 3001
 
-  // Set up CORS configuration
   app.enableCors({
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 

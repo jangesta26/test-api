@@ -23,7 +23,7 @@ export class CreateAccoountsDto {
 
     @IsNotEmpty()
     password: string;
-    
+
     @IsNotEmpty()
     status: number;
 

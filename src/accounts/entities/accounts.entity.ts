@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { UploadImage } from "src/upload/entities/upload.entity";
+import { UserLog } from "src/user-logs/entity/users.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'accounts' })
 export class Accounts {
@@ -31,4 +33,11 @@ export class Accounts {
 
     @CreateDateColumn()
     createdAt: Date;
+
+    @OneToMany(() => UploadImage, (uploadImage) => uploadImage.account)
+    images: UploadImage;
+
+    @OneToMany(() => UserLog, (usersLogs) => usersLogs.account)
+    logs: UserLog;
+
 }
